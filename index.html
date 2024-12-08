@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>A Special Surprise for Maanya</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.4/gsap.min.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Caveat:wght@700&family=Montserrat:wght@300;400;600&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #FFE5E5, #E3F2FD);
+            font-family: 'Montserrat', sans-serif;
+            overflow: hidden;
+        }
+        
+        .container {
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            perspective: 1000px;
+        }
+        
+        .magical-card {
+            width: 80vw;
+            max-width: 600px;
+            height: 70vh;
+            background: white;
+            border-radius: 30px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.1);
+            overflow: hidden;
+            position: relative;
+            transform-style: preserve-3d;
+            transition: all 1s ease;
+        }
+        
+        .magical-card.opened {
+            transform: rotateY(180deg) scale(1.1);
+        }
+        
+        .card-content {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 20px;
+        }
+        
+        .card-front {
+            background: linear-gradient(145deg, #FF69B4, #8A4FFF);
+            color: white;
+        }
+        
+        .card-back {
+            background: linear-gradient(145deg, #E3F2FD, #F3E5F5);
+            transform: rotateY(180deg);
+            overflow-y: auto;
+        }
+        
+        .floating-element {
+            position: absolute;
+            opacity: 0.7;
+            user-select: none;
+            pointer-events: none;
+        }
+        
+        .emoji-rain {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1000;
+        }
+        
+        .love-message {
+            font-family: 'Caveat', cursive;
+            font-size: 2rem;
+            color: #8A4FFF;
+            margin-top: 20px;
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
+        }
+        
+        @keyframes spin {
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <div class="emoji-rain" id="emojiRain"></div>
+    
+    <div class="container">
+        <div id="magicalCard" class="magical-card">
+            <div class="card-content card-front">
+                <h1 style="font-size: 2.5rem; margin-bottom: 20px;">Click to Reveal</h1>
+                <div style="font-size: 5rem;">🎂🧸💕</div>
+            </div>
+            
+            <div class="card-content card-back">
+                <h2 style="color: #FF69B4; font-size: 2.5rem; margin-bottom: 20px;">Maanya, You're Amazing! 🌟</h2>
+                
+                <p style="max-width: 500px; color: #6A5ACD; font-size: 1.2rem; line-height: 1.6;">
+                    Every challenge you face, every presentation you prepare, 
+                    every fashion show you shine in - I see your incredible dedication.
+                    You're not just doing great, you're extraordinary! 💖
+                </p>
+                
+                <div class="love-message">
+                    Forever Proud of You, My Love! ❤️
+                </div>
+                
+                <div style="margin-top: 30px; font-size: 1.5rem;">
+                    - Shreyansh 💕
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const card = document.getElementById('magicalCard');
+        const emojiRain = document.getElementById('emojiRain');
+        const emojis = ['🌸', '🎂', '🧸', '💕', '✨', '🌟'];
+
+        card.addEventListener('click', () => {
+            card.classList.toggle('opened');
+            triggerEmojiRain();
+        });
+
+        function triggerEmojiRain() {
+            for (let i = 0; i < 50; i++) {
+                const emoji = document.createElement('div');
+                emoji.innerHTML = emojis[Math.floor(Math.random() * emojis.length)];
+                emoji.style.position = 'fixed';
+                emoji.style.left = `${Math.random() * window.innerWidth}px`;
+                emoji.style.top = '-50px';
+                emoji.style.fontSize = `${Math.random() * 30 + 20}px`;
+                emoji.style.animation = `fall ${Math.random() * 3 + 2}s linear`;
+                emojiRain.appendChild(emoji);
+            }
+        }
+
+        // Floating background elements
+        function addFloatingElements() {
+            const elements = [
+                { emoji: '🧸', left: '10%', top: '20%' },
+                { emoji: '🌸', left: '80%', top: '10%' },
+                { emoji: '🎂', left: '30%', top: '70%' },
+                { emoji: '💕', left: '60%', top: '80%' }
+            ];
+
+            elements.forEach(el => {
+                const element = document.createElement('div');
+                element.innerHTML = el.emoji;
+                element.classList.add('floating-element');
+                element.style.left = el.left;
+                element.style.top = el.top;
+                element.style.fontSize = `${Math.random() * 50 + 30}px`;
+                element.style.animation = `float ${Math.random() * 3 + 3}s infinite`;
+                document.body.appendChild(element);
+            });
+        }
+
+        addFloatingElements();
+
+        // Optional GSAP animations
+        gsap.from(".magical-card", {
+            duration: 1, 
+            scale: 0.5, 
+            opacity: 0, 
+            ease: "back.out(1.7)"
+        });
+    </script>
+
+    <style>
+        @keyframes fall {
+            to {
+                transform: translateY(100vh) rotate(360deg);
+                opacity: 0;
+            }
+        }
+    </style>
+</body>
+</html>
